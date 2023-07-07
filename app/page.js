@@ -14,12 +14,18 @@ import {
   FaGamepad,
 } from "react-icons/fa";
 import { v4 } from "uuid";
+import Carousel from "./components/Carousel";
 
-
-
+// fetch function
+const getProducts = async () => {
+  const products = await fetch(
+    `https://www.screentechnicals.com/api/ecommerce/products`,
+    { next: { revalidate: 10 } }
+  );
+  return products.json();
+};
 
 const page = async () => {
-
   //  Popular Category array
   let componets = [
     {
@@ -60,6 +66,8 @@ const page = async () => {
     },
   ];
 
+  const products = await getProducts();
+  console.log(products);
 
   return (
     <div className="w-full">
@@ -74,9 +82,10 @@ const page = async () => {
           </p>
           <div className="md:pt-2 pt-6">
             <Link href={"/products"}>
-            <button className="px-4 py-2 bg-white text-black rounded-md capitalize hover:bg-[#99627A] hover:text-white">
-              Browse Products
-            </button></Link>
+              <button className="px-4 py-2 bg-white text-black rounded-md capitalize hover:bg-[#99627A] hover:text-white">
+                Browse Products
+              </button>
+            </Link>
           </div>
         </div>
         <div className="pl-5 md:flex items-center justify-center hidden">
@@ -89,15 +98,14 @@ const page = async () => {
         </h1>
         <div className="w-full flex justify-center items-center flex-wrap">
           {componets.map((item) => {
-              return (
-                <Link href={`/category/${item.category}`}>
-                  <button className="text-4xl border bg-white shadow-md p-4 rounded-xl hover:scale-90 transition-transform m-4">
-                    {item.icon}
-                  </button>
-                </Link>
-              );
-            })
-          }
+            return (
+              <Link href={`/category/${item.category}`}>
+                <button className="text-4xl border bg-white shadow-md p-4 rounded-xl hover:scale-90 transition-transform m-4">
+                  {item.icon}
+                </button>
+              </Link>
+            );
+          })}
         </div>
       </div>
 
@@ -105,7 +113,7 @@ const page = async () => {
         <h1 className="text-center text-xl font-bold py-10">Hot Deals 🔥</h1>
         <div className=" px-10">
           <div className=" text-center ml-4">
-
+            <Carousel products={products} />
           </div>
         </div>
       </div>
