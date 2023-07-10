@@ -13,8 +13,10 @@ const Card = ({ name, image, price, key }) => {
           priority={true}
           className=" object-contain h-40 w-40 md:h-52 md:w-52 md:p-2"
         />
+
       </div>
-      <div className="-ml-11 md:-ml-14">
+      <div className="mx-auto">
+      {/* <div className="-ml-11 md:-ml-14"> */}
         <h2 className="text-lg font-bold">{name.slice(0, 20)}...</h2>
         <p className="text-md font-semibold">&#8377;{price}</p>
       </div>
