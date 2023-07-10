@@ -1,4 +1,5 @@
 import Card from "@/app/components/Card";
+import Link from "next/link";
 import React from "react";
 
 // fetch function
@@ -22,12 +23,13 @@ const page = async ({ params }) => {
           item.category.toLowerCase().includes(search.toLowerCase())
         ) {
           return (
-            <Card
-              image={item.image}
-              price={item.price}
-              name={item.name}
-              key={item.id}
-            />
+            <Link href={`/products/${item.id}`} key={item.id}>
+              <Card
+                image={item.image}
+                price={item.price}
+                name={item.name}
+              />
+            </Link>
           );
         }
       })}

@@ -1,3 +1,4 @@
+import CartButtons from '@/app/components/CartButtons';
 import Image from 'next/image';
 import React from 'react'
 
@@ -15,6 +16,8 @@ const Page = async ({params}) => {
     const {id}=params
 
     const data = await getProduct(id)
+
+   
   return (
     <div>
           <div className="w-full flex flex-col lg:flex-row">
@@ -36,8 +39,7 @@ const Page = async ({params}) => {
         <h2 className="text-sm tracking-wide text-gray-800">
           {data?.[0]?.description}
         </h2>
-        {/* <Buttons data={data}/> */}
-        <button className='p-2 mt-2 rounded-md bg-red-500'>Add To Cart</button>
+        <CartButtons data={data}/>
       </div>
     </div>
     </div>

@@ -9,8 +9,10 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/firebase";
+import { auth, db } from "@/firebase";
 import profile from "../../public/images/profile.png";
+import { collection, query, where } from "firebase/firestore";
+import{useCollectionData} from 'react-firebase-hooks/firestore'
 
 const Navbar = () => {
 
@@ -26,6 +28,13 @@ const Navbar = () => {
   };
 
   const [user,loading]=useAuthState(auth)
+
+  const cartRef=collection(db,'cart');
+  const q=query(cartRef,where('uid','==',user?.uid))
+
+  const [cartSnapshotData,loading2]=useCollectionData(q);
+
+  let totalLength=cartSnapshotData?.length|| 0
   return (
     <div>
       <div className="w-full h-full border-b-[1.4px] border-b-white sticky top-0 left-0 z-50 gap-4">
@@ -61,7 +70,7 @@ const Navbar = () => {
               <BsCart3 className="text-lg text-white" />
               <p className="text-sm -mt-2 text-white">Rs:00.00</p>
               <span className="absolute w-4 h-4 bg-yellow-500 text-black -top-2 right-5 rounded-full flex items-center justify-center font-bodyFont text-xs">
-                0
+                {totalLength}
               </span>
             </div>
           </Link>
