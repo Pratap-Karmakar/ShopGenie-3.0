@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Image from "next/image";
 import React, { useState } from "react";
@@ -12,10 +12,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "@/firebase";
 import profile from "../../public/images/profile.png";
 import { collection, query, where } from "firebase/firestore";
-import{useCollectionData} from 'react-firebase-hooks/firestore'
+import { useCollectionData } from "react-firebase-hooks/firestore";
 
 const Navbar = () => {
-
   const router = useRouter();
 
   const [searchBox, setSearchBox] = useState("");
@@ -27,14 +26,13 @@ const Navbar = () => {
     }
   };
 
-  const [user,loading]=useAuthState(auth)
+  const [user, loading] = useAuthState(auth);
 
-  const cartRef=collection(db,'cart');
-  const q=query(cartRef,where('uid','==',user?.uid))
+  const cartsRef = collection(db, "cart");
 
-  const [cartSnapshotData,loading2]=useCollectionData(q);
+  const [cartSnapshotData, loading2] = useCollectionData(cartsRef);
 
-  let totalLength=cartSnapshotData?.length|| 0
+  let totalLength = cartSnapshotData?.filter((data) => data?.uid === user?.uid)?.length || 0;
   return (
     <div>
       <div className="w-full h-full border-b-[1.4px] border-b-white sticky top-0 left-0 z-50 gap-4">
@@ -57,11 +55,13 @@ const Navbar = () => {
               className="h-full w-full rounded-full px-4 text-black text-base outline-none border-[1px] border-transparent focus-visible:border-black duration-200"
               type="text"
               placeholder="Search your wish here!"
-              onChange={(e)=>{setSearchBox(e.target.value)}}
+              onChange={(e) => {
+                setSearchBox(e.target.value);
+              }}
               value={searchBox}
             />
             <span className="absolute w-8 h-8 rounded-full flex items-center justify-center top-1 right-1 bg-yellow-500 text-black text-xl">
-              <CiSearch/>
+              <CiSearch />
             </span>
           </form>
 
