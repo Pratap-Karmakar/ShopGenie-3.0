@@ -11,8 +11,8 @@ import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "@/firebase";
 import profile from "../../public/images/profile.png";
-import { collection, query, where } from "firebase/firestore";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import { collection, orderBy, query } from "firebase/firestore";
+import { useCollection, useCollectionData } from "react-firebase-hooks/firestore";
 
 const Navbar = () => {
   const router = useRouter();
@@ -30,9 +30,28 @@ const Navbar = () => {
 
   const cartsRef = collection(db, "cart");
 
-  const [cartSnapshotData, loading2] = useCollectionData(cartsRef);
+  const [cartSnapshotData] = useCollectionData(cartsRef);
+  
 
   let totalLength = cartSnapshotData?.filter((data) => data?.uid === user?.uid)?.length || 0;
+
+  const q = query(cartsRef, orderBy("createdAt"));
+  const [cartSnapshots] = useCollection(q);
+
+    //   to show the total price
+    let totalPrice = [];
+
+    cartSnapshots?.docs?.filter((data) => data?.data()?.uid === user?.uid).forEach((item)=>{
+      const price=item.data()?.price;
+      totalPrice.push(price)
+    })
+    let sum=0
+    for (let i = 0; i < totalPrice.length; i++) {
+      sum += totalPrice[i];
+      
+    }
+
+
   return (
     <div>
       <div className="w-full h-full border-b-[1.4px] border-b-white sticky top-0 left-0 z-50 gap-4">
@@ -68,7 +87,7 @@ const Navbar = () => {
           <Link href="/cart">
             <div className="flex flex-col justify-center items-center gap-2 h-12 px-5 rounded-full bg-transparent hover:bg-[#59284B] duration-300 ease-out relative">
               <BsCart3 className="text-lg text-white" />
-              <p className="text-sm -mt-2 text-white">Rs:00.00</p>
+              <p className="text-sm -mt-2 text-white">Rs. {sum}</p>
               <span className="absolute w-4 h-4 bg-yellow-500 text-black -top-2 right-5 rounded-full flex items-center justify-center font-bodyFont text-xs">
                 {totalLength}
               </span>

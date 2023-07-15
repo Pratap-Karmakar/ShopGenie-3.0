@@ -26,9 +26,9 @@ export default function RootLayout({ children }) {
       <body>
         {/* to make the header dynamically available in all pages */}
         <Header />
-        <div className="w-full flex pt-3 pl-8">
+        <div className="w-full flex pt-3 px-2">
           <Sidebar />
-          <div className="w-full -ml-2 md:ml-5  h-[80vh] overflow-y-auto">
+          <div className="w-full md:ml-5  h-[80vh] overflow-y-auto">
             {children}
           </div>
         </div>
